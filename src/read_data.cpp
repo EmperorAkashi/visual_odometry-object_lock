@@ -30,7 +30,7 @@ void ReadData::ReadImagesText(const std::string& path) {
     std::getline(line_stream1, item, ' ');
     const image_t image_id = std::stoul(item);
 
-    class Image image; //?
+    Image image; //?
     image.SetImageId(image_id);
 
     image.SetRegistered(true);
