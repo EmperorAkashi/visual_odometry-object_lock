@@ -4,10 +4,8 @@ Camera::Camera()
     : camera_id_(kInvalidCameraId),
       model_id_(kInvalidCameraModelId),
       width_(0),
-      height_(0),
-      prior_focal_length_(false) {}
+      height_(0){}
 
-std::string Camera::ModelName() const { return CameraModelIdToName(model_id_); }
 
 void Camera::SetModelId(const int model_id) {
   CHECK(ExistsCameraModelWithId(model_id));

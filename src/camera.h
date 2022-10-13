@@ -62,5 +62,23 @@ class Camera{
     std::vector<double> params_;
 
 };
+//////////////
+//Accessors
+/////////////
+camera_t Camera::CameraId() const { return camera_id_; }
+
+void Camera::SetCameraId(const camera_t camera_id) { camera_id_ = camera_id; }
+
+int Camera::ModelId() const { return model_id_; }
+
+size_t Camera::Width() const { return width_; }
+
+size_t Camera::Height() const { return height_; }
+
+void Camera::SetWidth(const size_t width) { width_ = width; }
+
+void Camera::SetHeight(const size_t height) { height_ = height; }
+
+bool Camera::HasPriorFocalLength() const { return prior_focal_length_; }
 
 #endif  // SRC_CAMERA_H_
