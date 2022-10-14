@@ -79,6 +79,5 @@ void Camera::SetWidth(const size_t width) { width_ = width; }
 
 void Camera::SetHeight(const size_t height) { height_ = height; }
 
-bool Camera::HasPriorFocalLength() const { return prior_focal_length_; }
 
 #endif  // SRC_CAMERA_H_

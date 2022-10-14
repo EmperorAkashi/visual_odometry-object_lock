@@ -6,6 +6,7 @@
 #include <Eigen/Core>
 
 #include "camera.h"
+#include "types.h"
 
 class Image {
     public:
