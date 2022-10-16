@@ -39,19 +39,26 @@ class Image {
 
      // Access quaternion vector as (qw, qx, qy, qz) specifying the rotation of the
      // pose which is defined as the transformation from world to image space.
-    inline const Eigen::Vector4d& Qvec() const;
-    inline Eigen::Vector4d& Qvec();
-    inline double Qvec(const size_t idx) const;
-    inline double& Qvec(const size_t idx);
-    inline void SetQvec(const Eigen::Vector4d& qvec);
+      inline const Eigen::Vector4d& Qvec() const;
+      inline Eigen::Vector4d& Qvec();
+      inline double Qvec(const size_t idx) const;
+      inline double& Qvec(const size_t idx);
+      inline void SetQvec(const Eigen::Vector4d& qvec);
+
+    // Access the coordinates of image points.
+    inline const class Point2D& Point2D(const point2D_t point2D_idx) const;
+    inline class Point2D& Point2D(const point2D_t point2D_idx);
+    inline const std::vector<class Point2D>& Points2D() const;
+    void SetPoints2D(const std::vector<Eigen::Vector2d>& points);
+    void SetPoints2D(const std::vector<class Point2D>& points);
 
     // Access translation vector as (tx, ty, tz) specifying the translation of the
-  // pose which is defined as the transformation from world to image space.
-  inline const Eigen::Vector3d& Tvec() const;
-  inline Eigen::Vector3d& Tvec();
-  inline double Tvec(const size_t idx) const;
-  inline double& Tvec(const size_t idx);
-  inline void SetTvec(const Eigen::Vector3d& tvec);
+    // pose which is defined as the transformation from world to image space.
+    inline const Eigen::Vector3d& Tvec() const;
+    inline Eigen::Vector3d& Tvec();
+    inline double Tvec(const size_t idx) const;
+    inline double& Tvec(const size_t idx);
+    inline void SetTvec(const Eigen::Vector3d& tvec);
     
     private:
     // Identifier of the image, if not specified `kInvalidImageId`.

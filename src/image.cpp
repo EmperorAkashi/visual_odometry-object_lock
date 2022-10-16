@@ -1,5 +1,6 @@
 #include "image.h"
 
+//initialize all attribute with default values
 Image::Image() 
     : image_id_(kInvalidImageId),
       name_(""),

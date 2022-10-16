@@ -8,6 +8,8 @@
 
 static const int InvalidCameraModelId = -1;
 
+//macro that initialize different camera models
+//include accesor of initialized camera
 #ifndef CAMERA_MODEL_DEFINITIONS
 #define CAMERA_MODEL_DEFINITIONS(model_id_value, model_name_value,             \
                                  num_params_value)                             \
@@ -20,7 +22,7 @@ static const int InvalidCameraModelId = -1;
   static const std::vector<size_t> focal_length_idxs;                          \
   static const std::vector<size_t> principal_point_idxs;                       \
   static const std::vector<size_t> extra_params_idxs;                          \
-                                                                               \
+  
   static inline int InitializeModelId() { return model_id_value; };            \
   static inline std::string InitializeModelName() {                            \
     return model_name_value;                                                   \
@@ -60,6 +62,42 @@ static const int InvalidCameraModelId = -1;
 #define CAMERA_MODEL_DOES_NOT_EXIST_EXCEPTION \
   throw std::domain_error("Camera model does not exist")
 
+// The "Curiously Recurring Template Pattern" (CRTP) is used here, so that we
+// can reuse some shared functionality between all camera models -
+// defined in the BaseCameraModel.
+//Standard Template to define cameras
+template <typename CameraModel>
+struct BaseCameraModel {
+  template <typename T>
+  static inline bool HasBogusParams(const std::vector<T>& params,
+                                    const size_t width, const size_t height,
+                                    const T min_focal_length_ratio,
+                                    const T max_focal_length_ratio,
+                                    const T max_extra_param);
+
+  template <typename T>
+  static inline bool HasBogusFocalLength(const std::vector<T>& params,
+                                         const size_t width,
+                                         const size_t height,
+                                         const T min_focal_length_ratio,
+                                         const T max_focal_length_ratio);
+
+  template <typename T>
+  static inline bool HasBogusPrincipalPoint(const std::vector<T>& params,
+                                            const size_t width,
+                                            const size_t height);
+
+  template <typename T>
+  static inline bool HasBogusExtraParams(const std::vector<T>& params,
+                                         const T max_extra_param);
+
+  template <typename T>
+  static inline T ImageToWorldThreshold(const T* params, const T threshold);
+
+  template <typename T>
+  static inline void IterativeUndistortion(const T* params, T* u, T* v);
+};
+
 // Simple Pinhole camera model.
 //
 // No Distortion is assumed. Only focal length and principal point is modeled.
@@ -71,7 +109,7 @@ static const int InvalidCameraModelId = -1;
 // See https://en.wikipedia.org/wiki/Pinhole_camera_model
 struct SimplePinholeCameraModel
     : public BaseCameraModel<SimplePinholeCameraModel> {
-  CAMERA_MODEL_DEFINITIONS(0, "SIMPLE_PINHOLE", 3)
+  CAMERA_MODEL_DEFINITIONS(0, "SIMPLE_PINHOLE", 3) //initialize a camera by macro
 };
 
 // Pinhole camera model.
@@ -160,3 +198,207 @@ inline void CameraModelImageToWorld(const int model_id,
                                     const std::vector<double>& params,
                                     const double x, const double y, double* u,
                                     double* v);
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation & Accessors
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// BaseCameraModel
+
+template <typename CameraModel>
+template <typename T>
+bool BaseCameraModel<CameraModel>::HasBogusParams(
+    const std::vector<T>& params, const size_t width, const size_t height,
+    const T min_focal_length_ratio, const T max_focal_length_ratio,
+    const T max_extra_param) {
+  if (HasBogusPrincipalPoint(params, width, height)) {
+    return true;
+  }
+
+  if (HasBogusFocalLength(params, width, height, min_focal_length_ratio,
+                          max_focal_length_ratio)) {
+    return true;
+  }
+
+  if (HasBogusExtraParams(params, max_extra_param)) {
+    return true;
+  }
+
+  return false;
+}
+
+template <typename CameraModel>
+template <typename T>
+bool BaseCameraModel<CameraModel>::HasBogusFocalLength(
+    const std::vector<T>& params, const size_t width, const size_t height,
+    const T min_focal_length_ratio, const T max_focal_length_ratio) {
+  const size_t max_size = std::max(width, height);
+
+  for (const auto& idx : CameraModel::focal_length_idxs) {
+    const T focal_length_ratio = params[idx] / max_size;
+    if (focal_length_ratio < min_focal_length_ratio ||
+        focal_length_ratio > max_focal_length_ratio) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+template <typename CameraModel>
+template <typename T>
+bool BaseCameraModel<CameraModel>::HasBogusPrincipalPoint(
+    const std::vector<T>& params, const size_t width, const size_t height) {
+  const T cx = params[CameraModel::principal_point_idxs[0]];
+  const T cy = params[CameraModel::principal_point_idxs[1]];
+  return cx < 0 || cx > width || cy < 0 || cy > height;
+}
+
+template <typename CameraModel>
+template <typename T>
+bool BaseCameraModel<CameraModel>::HasBogusExtraParams(
+    const std::vector<T>& params, const T max_extra_param) {
+  for (const auto& idx : CameraModel::extra_params_idxs) {
+    if (std::abs(params[idx]) > max_extra_param) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// SimplePinholeCameraModel
+
+//print params name as a string
+std::string SimplePinholeCameraModel::InitializeParamsInfo() {
+  return "f, cx, cy";
+}
+//sepcify idx of focal
+std::vector<size_t> SimplePinholeCameraModel::InitializeFocalLengthIdxs() {
+  return {0};
+}
+//specify idx of principal
+std::vector<size_t> SimplePinholeCameraModel::InitializePrincipalPointIdxs() {
+  return {1, 2};
+}
+
+std::vector<size_t> SimplePinholeCameraModel::InitializeExtraParamsIdxs() {
+  return {};
+}
+
+std::vector<double> SimplePinholeCameraModel::InitializeParams(
+    const double focal_length, const size_t width, const size_t height) {
+  return {focal_length, width / 2.0, height / 2.0};//why divide by 2.0??
+}
+
+template <typename T>
+void SimplePinholeCameraModel::WorldToImage(const T* params, const T u,
+                                            const T v, T* x, T* y) {
+  const T f = params[0];
+  const T c1 = params[1];
+  const T c2 = params[2];
+
+  // No Distortion
+
+  // Transform to image coordinates
+  *x = f * u + c1; //world coord only 2 dims?
+  *y = f * v + c2;
+}
+
+template <typename T>
+void SimplePinholeCameraModel::ImageToWorld(const T* params, const T x,
+                                            const T y, T* u, T* v) {
+  const T f = params[0];
+  const T c1 = params[1];
+  const T c2 = params[2];
+
+  *u = (x - c1) / f;
+  *v = (y - c2) / f;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PinholeCameraModel
+
+std::string PinholeCameraModel::InitializeParamsInfo() {
+  return "fx, fy, cx, cy";
+}
+
+std::vector<size_t> PinholeCameraModel::InitializeFocalLengthIdxs() {
+  return {0, 1};
+}
+
+std::vector<size_t> PinholeCameraModel::InitializePrincipalPointIdxs() {
+  return {2, 3};
+}
+
+std::vector<size_t> PinholeCameraModel::InitializeExtraParamsIdxs() {
+  return {};
+}
+
+std::vector<double> PinholeCameraModel::InitializeParams(
+    const double focal_length, const size_t width, const size_t height) {
+  return {focal_length, focal_length, width / 2.0, height / 2.0};
+}
+
+template <typename T>
+void PinholeCameraModel::WorldToImage(const T* params, const T u, const T v,
+                                      T* x, T* y) {
+  const T f1 = params[0];
+  const T f2 = params[1];
+  const T c1 = params[2];
+  const T c2 = params[3];
+
+  // No Distortion
+
+  // Transform to image coordinates
+  *x = f1 * u + c1;
+  *y = f2 * v + c2;
+}
+
+template <typename T>
+void PinholeCameraModel::ImageToWorld(const T* params, const T x, const T y,
+                                      T* u, T* v) {
+  const T f1 = params[0];
+  const T f2 = params[1];
+  const T c1 = params[2];
+  const T c2 = params[3];
+
+  *u = (x - c1) / f1;
+  *v = (y - c2) / f2;
+}
+
+/////////
+void CameraModelWorldToImage(const int model_id,
+                             const std::vector<double>& params, const double u,
+                             const double v, double* x, double* y) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)                    \
+  case CameraModel::kModelId:                             \
+    CameraModel::WorldToImage(params.data(), u, v, x, y); \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+}
+
+void CameraModelImageToWorld(const int model_id,
+                             const std::vector<double>& params, const double x,
+                             const double y, double* u, double* v) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)                    \
+  case CameraModel::kModelId:                             \
+    CameraModel::ImageToWorld(params.data(), x, y, u, v); \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+}
+
+
+#endif  // SRC_CAMERA_MODELS_H_
