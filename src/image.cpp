@@ -15,6 +15,7 @@ Image::Image()
       qvec_prior_(kNaN, kNaN, kNaN, kNaN),
       tvec_prior_(kNaN, kNaN, kNaN) {}
 
+//
 void Image::SetUp(const class Camera& camera) {
     CHECK_EQ(camera_id_, camera.CameraId());
 }
