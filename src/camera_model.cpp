@@ -28,3 +28,30 @@ CAMERA_MODEL_CASES
 
 #undef CAMERA_MODEL_CASE
 
+std::unordered_map<std::string, int> InitialzeCameraModelNameToId() {
+  std::unordered_map<std::string, int> camera_model_name_to_id;
+//use macro to set cameramodel id & name
+#define CAMERA_MODEL_CASE(CameraModel)                     \
+  camera_model_name_to_id.emplace(CameraModel::model_name, \
+                                  CameraModel::model_id);
+
+  CAMERA_MODEL_CASES
+
+#undef CAMERA_MODEL_CASE
+
+  return camera_model_name_to_id;
+}
+
+std::unordered_map<int, std::string> InitialzeCameraModelIdToName() {
+  std::unordered_map<int, std::string> camera_model_id_to_name;
+
+#define CAMERA_MODEL_CASE(CameraModel)                   \
+  camera_model_id_to_name.emplace(CameraModel::model_id, \
+                                  CameraModel::model_name);
+
+  CAMERA_MODEL_CASES
+
+#undef CAMERA_MODEL_CASE
+
+  return camera_model_id_to_name;
+}
