@@ -100,3 +100,100 @@ std::string CameraModelIdToName(const int model_id) {
     return it->second;
   }
 }
+
+std::vector<double> CameraModelInitializeParams(const int model_id,
+                                                const double focal_length,
+                                                const size_t width,
+                                                const size_t height) {
+  // Assuming that image measurements are within [0, dim], i.e. that the
+  // upper left corner is the (0, 0) coordinate (rather than the center of
+  // the upper left pixel). This complies with the default SiftGPU convention.
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)                                 \
+  case CameraModel::kModelId:                                          \
+    return CameraModel::InitializeParams(focal_length, width, height); \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+}
+
+std::string CameraModelParamsInfo(const int model_id) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel) \
+  case CameraModel::kModelId:          \
+    return CameraModel::params_info;   \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+
+  return "Camera model does not exist";
+}
+
+//dummy vector to raise if no idx info available
+static const std::vector<size_t> EMPTY_IDXS;
+
+//return the idx, method defined in the header file
+const std::vector<size_t>& CameraModelFocalLengthIdxs(const int model_id) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)     \
+  case CameraModel::kModelId:              \
+    return CameraModel::focal_length_idxs; \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+
+  return EMPTY_IDXS;
+}
+
+const std::vector<size_t>& CameraModelPrincipalPointIdxs(const int model_id) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)        \
+  case CameraModel::kModelId:                 \
+    return CameraModel::principal_point_idxs; \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+
+  return EMPTY_IDXS;
+}
+
+const std::vector<size_t>& CameraModelExtraParamsIdxs(const int model_id) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel)     \
+  case CameraModel::kModelId:              \
+    return CameraModel::extra_params_idxs; \
+    break;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+
+  return EMPTY_IDXS;
+}
+
+size_t CameraModelNumParams(const int model_id) {
+  switch (model_id) {
+#define CAMERA_MODEL_CASE(CameraModel) \
+  case CameraModel::kModelId:          \
+    return CameraModel::num_params;
+
+    CAMERA_MODEL_SWITCH_CASES
+
+#undef CAMERA_MODEL_CASE
+  }
+
+  return 0;
+}
