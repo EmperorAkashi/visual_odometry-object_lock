@@ -6,14 +6,19 @@
 class ReadData{
     public:
 
+    // Read data from text or binary file. 
     read_data(std::string filename);
 
     void ReadCamerasText(const std::string& path);
     void ReadImagesText(const std::string& path);
     void ReadPoints3DText(const std::string& path);
-
+    
+    //map to store images/camera info
     private:
+    EIGEN_STL_UMAP(camera_t, class Camera) cameras_;
     EIGEN_STL_UMAP(image_t, class Image) images_;
+    EIGEN_STL_UMAP(point3D_t, class Point3D) points3D_;
+
     // { image_id, ... } where `images_.at(image_id).registered == true`.
     std::vector<image_t> reg_image_ids_;
 };

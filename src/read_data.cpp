@@ -3,20 +3,24 @@
 #include "read_data.h"
 #include "string.h"
 
+//initialize the class with file path/name
 ReadData::ReadData(std::string filename){
   public:
     string filename = filename;
 }
 
 void ReadData::ReadImagesText(const std::string& path) {
+  //clear the map for the new instance
   images_.clear(); 
 
+  //a stream named as file
   std::ifstream file(path);
   CHECK(file.is_open()) << path;
 
   std::string line;
   std::string item;
 
+  //process the file line by line
   while (std::getline(file, line)) {
     StringTrim(&line);
 

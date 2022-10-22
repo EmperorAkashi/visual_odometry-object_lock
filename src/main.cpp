@@ -17,7 +17,19 @@ int random()
 
 //check exe file of COLMAP, read image files by argument
 int main(int argc, char** argv){
+    if (argc < 4)
+    {
+        std::cout << "Standard Input" << std::endl;
+        std::cout << " " << argv[0] << "<image> <camera> <point3d>" << endl;
+    }
+
+    std::string image_file = argv[1];
+    std::string camera_file = argv[2];
+    std::string point3d_file = argv[3];
     int n = images.size();  //number of images
+
+    int idx1 = random();
+    int idx2 = random();
     
     Image Image1 = Image();
 
