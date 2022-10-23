@@ -42,5 +42,6 @@ int main(int argc, char** argv){
 
     //create camera for image1&2, read camera paras
     int camera_id1 = Image1.camera_id_;
+    int camera_id2 = Image2.camera_id_;
     
 }
