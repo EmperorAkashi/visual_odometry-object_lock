@@ -3,6 +3,7 @@
 #include <random>
 #include "read_data.h"
 #include "images.h"
+#include "camera.h"
 
 int random()
 {
@@ -37,11 +38,19 @@ int main(int argc, char** argv){
     int idx2 = random();
     //image instances and corresponding data already set in image class
     //images_ is a map of images
+    read_image.ReadImagesText(read_image.filename);
     Image Image1 = read_image.images_[idx1]; //check image_t == image_id??
     Image Image2 = read_image.images_[idx2];
 
     //create camera for image1&2, read camera paras
+    read_camera.ReadCamerasText(read_camera.filename);
     int camera_id1 = Image1.camera_id_;
     int camera_id2 = Image2.camera_id_;
-    
+    Camera camera1 = read_camera.cameras_[camera_id1];
+    Camera camera2 = read_camera.cameras_[camera_id2];
+    std::vector<size_t> cam_para = camera1.params_;//check def of params??
+    std::vector<size_t> cam_focal = camera1.FocalLengthIdxs();
+
+    Eigen::Matrix3d calibration = camera1.CalibrationMatrix();
+
 }

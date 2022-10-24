@@ -44,6 +44,18 @@ class Camera{
     void SetPrincipalPointX(const double ppx);
     void SetPrincipalPointY(const double ppy);
 
+    // Get the indices of the parameter groups in the parameter vector.
+    const std::vector<size_t>& FocalLengthIdxs() const;
+    const std::vector<size_t>& PrincipalPointIdxs() const;
+    const std::vector<size_t>& ExtraParamsIdxs() const;
+
+    // Get intrinsic calibration matrix composed from focal length and principal
+    // point parameters, excluding distortion parameters.
+    Eigen::Matrix3d CalibrationMatrix() const;
+
+    // Get human-readable information about the parameter vector ordering.
+    std::string ParamsInfo() const;
+
     private:
     // The unique identifier of the camera. If the identifier is not specified
     // it is set to `kInvalidCameraId`.

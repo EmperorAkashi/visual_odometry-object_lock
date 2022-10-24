@@ -13,10 +13,15 @@ class ReadData{
     void ReadCamerasText(const std::string& path);
     void ReadImagesText(const std::string& path);
     void ReadPoints3DText(const std::string& path);
+
+    // Get reference to all objects.
+    inline const unordered_map<camera_t, class Camera> & Cameras() const;
+    inline const unordered_map<image_t, class Image> & Images() const;
+    inline const unordered_map<point3D_t, class Point3D> & Points3D() const;
     
     //map to store images/camera info
     private:
-    unordered_map<camera_t, class Camera> cameras_;
+    unordered_map<camera_t, class Camera> cameras_; //hashmap vs EigenMap?
     unordered_map<image_t, class Image> images_;
     unordered_map<point3D_t, class Point3D> points3D_;
 
