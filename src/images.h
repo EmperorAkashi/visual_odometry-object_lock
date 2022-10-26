@@ -46,6 +46,7 @@ class Image {
       inline void SetQvec(const Eigen::Vector4d& qvec);
 
     // Access the coordinates of image points.
+    // need wrap the class of point2D&3D OR use a vector
     inline const class Point2D& Point2D(const point2D_t point2D_idx) const;
     inline class Point2D& Point2D(const point2D_t point2D_idx);
     inline const std::vector<class Point2D>& Points2D() const;
@@ -62,33 +63,33 @@ class Image {
     
     private:
     // Identifier of the image, if not specified `kInvalidImageId`.
-    image_t image_id_;
+    _int32 image_id_;
 
     // The name of the image, i.e. the relative path.
     std::string name_;
 
     // The identifier of the associated camera. Note that multiple images might
     // share the same camera. If not specified `kInvalidCameraId`.
-    camera_t camera_id_;
+    _int32 camera_id_;
 
     // Whether the image is successfully registered in the reconstruction.
     bool registered_;
 
     // The number of 3D points the image observes, i.e. the sum of its `points2D`
     // where `point3D_id != kInvalidPoint3DId`.
-    point2D_t num_points3D_;
+    _int32 num_points3D_;
 
     // The number of image points that have at least one correspondence to
     // another image.
-    point2D_t num_observations_;
+    _int32 num_observations_;
 
     // The sum of correspondences per image point.
-    point2D_t num_correspondences_;
+    _int32 num_correspondences_;
 
     // The number of 2D points, which have at least one corresponding 2D point in
     // another image that is part of a 3D point track, i.e. the sum of `points2D`
     // where `num_tris > 0`.
-    point2D_t num_visible_points3D_;
+    _int32 num_visible_points3D_;
 
     // The pose of the image, defined as the transformation from world to image.
     Eigen::Vector4d qvec_;

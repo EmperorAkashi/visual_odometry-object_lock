@@ -53,4 +53,6 @@ int main(int argc, char** argv){
 
     Eigen::Matrix3d calibration = camera1.CalibrationMatrix();
 
+    //read 3d, find consistent in point3D_, which is a member variable of ReadData
+    
 }

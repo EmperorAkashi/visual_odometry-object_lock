@@ -34,22 +34,34 @@ const std::vector<size_t>& Camera::ExtraParamsIdxs() const {
   return CameraModelExtraParamsIdxs(model_id_);
 }
 
-Eigen::Matrix3d Camera::CalibrationMatrix() const {
-  Eigen::Matrix3d K = Eigen::Matrix3d::Identity();
+double Camera::PrincipalPointX() const {
+  const std::vector<size_t>& idxs = PrincipalPointIdxs();
+  CHECK_EQ(idxs.size(), 2);
+  return params_[idxs[0]];
+}
 
-  const std::vector<size_t>& idxs = FocalLengthIdxs();
-  if (idxs.size() == 1) {
+double Camera::PrincipalPointY() const {
+  const std::vector<size_t>& idxs = PrincipalPointIdxs();
+  CHECK_EQ(idxs.size(), 2);
+  return params_[idxs[1]];
+}
+
+Eigen::Matrix3d Camera::CalibrationMatrix() const {
+  Eigen::Matrix3d K = Eigen::Matrix3d::Identity(); //initialize an identity matrix
+
+  const std::vector<size_t>& idxs = FocalLengthIdxs(); //get idxs of focal, from camera model
+  if (idxs.size() == 1) {   //one focal
     K(0, 0) = params_[idxs[0]];
     K(1, 1) = params_[idxs[0]];
-  } else if (idxs.size() == 2) {
+  } else if (idxs.size() == 2) { //fx, fy
     K(0, 0) = params_[idxs[0]];
     K(1, 1) = params_[idxs[1]];
   } else {
-    LOG(FATAL)
-        << "Camera model must either have 1 or 2 focal length parameters.";
+    std::cout
+        << "Camera model must either have 1 or 2 focal length parameters." << std::endl;
   }
 
-  K(0, 2) = PrincipalPointX();
+  K(0, 2) = PrincipalPointX(); 
   K(1, 2) = PrincipalPointY();
 
   return K;

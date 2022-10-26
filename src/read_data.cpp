@@ -138,7 +138,7 @@ void ReadData::ReadCamerasText(const std::string& path) {
 
     std::stringstream line_stream(line);
 
-    class Camera camera;
+    Camera camera;
 
     // ID
     std::getline(line_stream, item, ' ');
