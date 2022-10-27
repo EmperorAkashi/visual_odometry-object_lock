@@ -53,6 +53,14 @@ class Image {
     void SetPoints2D(const std::vector<Eigen::Vector2d>& points);
     void SetPoints2D(const std::vector<class Point2D>& points);
 
+    ///
+    //need setpoint3d, point2D vector call setpoint3d method
+    ///
+
+    // Set the point as triangulated, i.e. it is part of a 3D point track.
+    void SetPoint3DForPoint2D(const uint32_t point2D_idx,
+                              const uint32_t point3D_id);
+
     // Access translation vector as (tx, ty, tz) specifying the translation of the
     // pose which is defined as the transformation from world to image space.
     inline const Eigen::Vector3d& Tvec() const;
@@ -63,33 +71,33 @@ class Image {
     
     private:
     // Identifier of the image, if not specified `kInvalidImageId`.
-    _int32 image_id_;
+    uint32_t image_id_;
 
     // The name of the image, i.e. the relative path.
     std::string name_;
 
     // The identifier of the associated camera. Note that multiple images might
     // share the same camera. If not specified `kInvalidCameraId`.
-    _int32 camera_id_;
+    uint32_t camera_id_;
 
     // Whether the image is successfully registered in the reconstruction.
     bool registered_;
 
     // The number of 3D points the image observes, i.e. the sum of its `points2D`
     // where `point3D_id != kInvalidPoint3DId`.
-    _int32 num_points3D_;
+    uint32_t num_points3D_;
 
     // The number of image points that have at least one correspondence to
     // another image.
-    _int32 num_observations_;
+    uint32_t num_observations_;
 
     // The sum of correspondences per image point.
-    _int32 num_correspondences_;
+    uint32_t num_correspondences_;
 
     // The number of 2D points, which have at least one corresponding 2D point in
     // another image that is part of a 3D point track, i.e. the sum of `points2D`
     // where `num_tris > 0`.
-    _int32 num_visible_points3D_;
+    uint32_t num_visible_points3D_;
 
     // The pose of the image, defined as the transformation from world to image.
     Eigen::Vector4d qvec_;

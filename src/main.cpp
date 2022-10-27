@@ -34,13 +34,23 @@ int main(int argc, char** argv){
     ReadData read_point3d = ReadData(point3d_file);
     int n = read_image.images_.size();  //number of images by access member data
 
-    int idx1 = random();
-    int idx2 = random();
+    uint32_t idx1 = random();
+    uint32_t idx2 = random();
+    
     //image instances and corresponding data already set in image class
     //images_ is a map of images
     read_image.ReadImagesText(read_image.filename);
     Image Image1 = read_image.images_[idx1]; //check image_t == image_id??
     Image Image2 = read_image.images_[idx2];
+
+    //set boolean when read 3d idx from image.txt
+    while (! read_image.images_[idx1].HasPoint3D()){
+        idx1 = random();
+    }
+
+    while (! read_image.images_[idx2].HasPoint3D() || idx2 == idx1){
+        idx2 = random();
+    }
 
     //create camera for image1&2, read camera paras
     read_camera.ReadCamerasText(read_camera.filename);
@@ -54,5 +64,8 @@ int main(int argc, char** argv){
     Eigen::Matrix3d calibration = camera1.CalibrationMatrix();
 
     //read 3d, find consistent in point3D_, which is a member variable of ReadData
+    //Test 3d point's reprojection for camera 1
+    uint32_t Cam1Point2D_id =  random();
+    Point2D = Image1.Points2D_[Cam1Point2D_id];
     
 }

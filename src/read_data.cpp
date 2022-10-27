@@ -2,6 +2,8 @@
 #include <string>
 #include "read_data.h"
 #include "string.h"
+#include "point2d.h"
+#include "point3d.h"
 
 //initialize the class with file path/name
 ReadData::ReadData(std::string filename){
@@ -17,8 +19,8 @@ void ReadData::ReadImagesText(const std::string& path) {
   std::ifstream file(path);
   CHECK(file.is_open()) << path;
 
-  std::string line;
-  std::string item;
+  std::string line; //each line of the path file
+  std::string item; // each item of current line (by string stream)
 
   //process the file line by line
   while (std::getline(file, line)) {
@@ -32,13 +34,13 @@ void ReadData::ReadImagesText(const std::string& path) {
 
     // ID
     std::getline(line_stream1, item, ' ');
-    const image_t image_id = std::stoul(item);
+    const uint32_t image_id = std::stoul(item);
 
     Image image; //default constructor
     image.SetImageId(image_id);
 
     image.SetRegistered(true);
-    reg_image_ids_.push_back(image_id);
+    reg_image_ids_.push_back(image_id); //data member of ReadData
 
     // QVEC (qw, qx, qy, qz)
     std::getline(line_stream1, item, ' ');
@@ -81,34 +83,35 @@ void ReadData::ReadImagesText(const std::string& path) {
     StringTrim(&line);
     std::stringstream line_stream2(line);
 
-    std::vector<Eigen::Vector2d> points2D;
-    std::vector<point3D_t> point3D_ids;
+    std::vector<Point2D> points2D_arr;
+    std::vector<uint32_t> point3D_ids;
 
     if (!line.empty()) {
       while (!line_stream2.eof()) {  //not the end of file/line
-        Eigen::Vector2d point;
+        Point2D point; //new instance of point2d
 
         std::getline(line_stream2, item, ' ');
-        point.x() = std::stold(item);
+        point.X() = std::stold(item);
 
         std::getline(line_stream2, item, ' ');
-        point.y() = std::stold(item);
+        point.Y() = std::stold(item);
 
-        points2D.push_back(point);
+        points2D_arr.push_back(point);
 
         std::getline(line_stream2, item, ' ');
         if (item == "-1") {
           point3D_ids.push_back(kInvalidPoint3DId);
         } else {
-          point3D_ids.push_back(std::stoll(item));
+          point3D_ids.push_back(std::stoll(item)); //specify 3d's id
+          point.point3D_id_ = std::stoll(item)；//set the point3d's id for curr 2d point
         }
       }
     }
 
     image.SetUp(Camera(image.CameraId()));
-    image.SetPoints2D(points2D);
+    image.SetPoints2D(points2D); //image's attr call point2d to set xy coord
 
-    for (point2D_t point2D_idx = 0; point2D_idx < image.NumPoints2D();
+    for (uint32_t point2D_idx = 0; point2D_idx < image.NumPoints2D();
          ++point2D_idx) {
       if (point3D_ids[point2D_idx] != kInvalidPoint3DId) {
         image.SetPoint3DForPoint2D(point2D_idx, point3D_ids[point2D_idx]);
@@ -189,7 +192,7 @@ void ReadData::ReadPoints3DText(const std::string& path) {
 
     // ID
     std::getline(line_stream, item, ' ');
-    const point3D_t point3D_id = std::stoll(item);
+    const uint32_t point3D_id = std::stoll(item);
 
     // Make sure, that we can add new 3D points after reading 3D points
     // without overwriting existing 3D points.
@@ -221,24 +224,24 @@ void ReadData::ReadPoints3DText(const std::string& path) {
     std::getline(line_stream, item, ' ');
     point3D.SetError(std::stold(item));
 
-    // TRACK
-    while (!line_stream.eof()) {
-      TrackElement track_el;
+    // // TRACK
+    // while (!line_stream.eof()) {
+    //   TrackElement track_el;
 
-      std::getline(line_stream, item, ' ');
-      StringTrim(&item);
-      if (item.empty()) {
-        break;
-      }
-      track_el.image_id = std::stoul(item);
+    //   std::getline(line_stream, item, ' ');
+    //   StringTrim(&item);
+    //   if (item.empty()) {
+    //     break;
+    //   }
+    //   track_el.image_id = std::stoul(item);
 
-      std::getline(line_stream, item, ' ');
-      track_el.point2D_idx = std::stoul(item);
+    //   std::getline(line_stream, item, ' ');
+    //   track_el.point2D_idx = std::stoul(item);
 
-      point3D.Track().AddElement(track_el);
-    }
+    //   point3D.Track().AddElement(track_el);
+    // }
 
-    point3D.Track().Compress();
+    //point3D.Track().Compress();
 
     points3D_.emplace(point3D_id, point3D);
   }
