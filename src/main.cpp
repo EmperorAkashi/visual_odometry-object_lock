@@ -4,6 +4,9 @@
 #include "read_data.h"
 #include "images.h"
 #include "camera.h"
+#include "point2d.h"
+#include "point3d.h"
+#include <cmath>
 
 int random()
 {
@@ -16,6 +19,9 @@ int random()
     return idx;
 }
 
+double ProjDiff(Eigen::Vector2d Orig2D, Eigen::Vector3d Proj2D){
+    return std::abs(pow(Orig2D[0] - Proj2D[0], 2) + pow(Orig2D[1] - Proj2D[1], 2))
+}
 
 
 //check exe file of COLMAP, read image files by argument
@@ -66,6 +72,21 @@ int main(int argc, char** argv){
     //read 3d, find consistent in point3D_, which is a member variable of ReadData
     //Test 3d point's reprojection for camera 1
     uint32_t Cam1Point2D_id =  random();
-    Point2D = Image1.Points2D_[Cam1Point2D_id];
-    
+    Point2D Cam1Point = Image1.Points2D_[Cam1Point2D_id];
+    //call correspond 3d point from its attr
+    uint32_t Cam1Point3D_id = Cam1Point.point3D_id_;
+    Point3D Cam1Point3D = read_point3d.points3D_[Cam1Point3D_id];
+
+    Eigen::Vector3d Cam1Point3D_Vec = Cam1Point3D.XYZ();
+    Eigen::Matrix3x4d Image1ProjMat = Image1.ProjectionMatrix();
+
+    Eigen::Vector4d Cam1Point3D_Homo = Eigen::Vector4d::Identity();
+    Cam1Point3D_Homo.topRows(3) = Cam1Point3D_Vec;
+
+    Eigen::Vector3d Projected2D = calibraton*Image1ProjMat*Cam1Point3D_Homo;
+
+    double diff = ProjDiff(Cam1Point.XY(), Projected2D);
+    std::cout << "difference of one projection"  << diff << std::endl;
+
+    return 0;
 }

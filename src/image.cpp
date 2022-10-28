@@ -41,6 +41,10 @@ void Image::SetPoint3DForPoint2D(const uint32_t point2D_idx,
   point2D.SetPoint3DId(point3D_id);
 }
 
+Eigen::Matrix3x4d Image::ProjectionMatrix() const {
+  return ComposeProjectionMatrix(qvec_, tvec_);
+}
+
 
 void Image::IncrementCorrespondenceHasPoint3D(const _int32 point2D_idx) {
   const class Point2D& point2D = points2D_.at(point2D_idx);
