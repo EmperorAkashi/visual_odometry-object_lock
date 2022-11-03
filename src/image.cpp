@@ -41,6 +41,31 @@ void Image::SetPoint3DForPoint2D(const uint32_t point2D_idx,
   point2D.SetPoint3DId(point3D_id);
 }
 
+Eigen::Matrix3d QuaternionToRotationMatrix(const Eigen::Vector4d& qvec) {
+  const Eigen::Vector4d normalized_qvec = NormalizeQuaternion(qvec);
+  const Eigen::Quaterniond quat(normalized_qvec(0), normalized_qvec(1),
+                                normalized_qvec(2), normalized_qvec(3));
+  return quat.toRotationMatrix();
+}
+
+//compose proj matrix from Quartenion & Translation
+Eigen::Matrix3x4d ComposeProjectionMatrix(const Eigen::Vector4d& qvec,
+                                          const Eigen::Vector3d& tvec) {
+  Eigen::Matrix3x4d proj_matrix;
+  proj_matrix.leftCols<3>() = QuaternionToRotationMatrix(qvec);
+  proj_matrix.rightCols<1>() = tvec;
+  return proj_matrix;
+}
+
+//compose proj matrix from Rotation & Translation
+Eigen::Matrix3x4d ComposeProjectionMatrix(const Eigen::Matrix3d& R,
+                                          const Eigen::Vector3d& T) {
+  Eigen::Matrix3x4d proj_matrix;
+  proj_matrix.leftCols<3>() = R;
+  proj_matrix.rightCols<1>() = T;
+  return proj_matrix;
+}
+
 Eigen::Matrix3x4d Image::ProjectionMatrix() const {
   return ComposeProjectionMatrix(qvec_, tvec_);
 }

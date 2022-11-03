@@ -68,6 +68,38 @@ class Image {
     inline double Tvec(const size_t idx) const;
     inline double& Tvec(const size_t idx);
     inline void SetTvec(const Eigen::Vector3d& tvec);
+
+    // Convert Quaternion representation to 3D rotation matrix.
+    //
+    // @param qvec           Unit Quaternion rotation coefficients (w, x, y, z).
+    //
+    // @return               3x3 rotation matrix.
+    Eigen::Matrix3d QuaternionToRotationMatrix(const Eigen::Vector4d& qvec);
+
+    // Compose projection matrix from rotation and translation components.
+    //
+    // The projection matrix transforms 3D world to image points.
+    //
+    // @param qvec           Unit Quaternion rotation coefficients (w, x, y, z).
+    // @param tvec           3x1 translation vector.
+    //
+    // @return               3x4 projection matrix.
+    Eigen::Matrix3x4d ComposeProjectionMatrix(const Eigen::Vector4d& qvec,
+                                              const Eigen::Vector3d& tvec);
+
+    // Compose projection matrix from rotation matrix and translation components).
+    //
+    // The projection matrix transforms 3D world to image points.
+    //
+    // @param R              3x3 rotation matrix.
+    // @param t              3x1 translation vector.
+    //
+    // @return               3x4 projection matrix.
+    Eigen::Matrix3x4d ComposeProjectionMatrix(const Eigen::Matrix3d& R,
+                                              const Eigen::Vector3d& T);
+
+    // Compose the projection matrix from world to image space.
+    Eigen::Matrix3x4d ProjectionMatrix() const;
     
     private:
     // Identifier of the image, if not specified `kInvalidImageId`.
@@ -111,6 +143,8 @@ class Image {
     std::vector<class Point2D> points2D_;
 
     // Per image point, the number of correspondences that have a 3D point.
-    std::vector<point2D_t> num_correspondences_have_point3D_;
+    std::vector<uint32_t> num_correspondences_have_point3D_;
 
     }；
+
+    #endif //SRC_IMAGE_H_

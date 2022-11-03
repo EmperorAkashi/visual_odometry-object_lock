@@ -20,7 +20,7 @@ int random()
 }
 
 double ProjDiff(Eigen::Vector2d Orig2D, Eigen::Vector3d Proj2D){
-    return std::abs(pow(Orig2D[0] - Proj2D[0], 2) + pow(Orig2D[1] - Proj2D[1], 2))
+    return std::abs(pow(Orig2D[0] - Proj2D[0]/Proj2D[2], 2) + pow(Orig2D[1] - Proj2D[1]/Proj2D[2], 2))
 }
 
 
@@ -80,8 +80,9 @@ int main(int argc, char** argv){
     Eigen::Vector3d Cam1Point3D_Vec = Cam1Point3D.XYZ();
     Eigen::Matrix3x4d Image1ProjMat = Image1.ProjectionMatrix();
 
+    //generate a 3d points in homo space for projection
     Eigen::Vector4d Cam1Point3D_Homo = Eigen::Vector4d::Identity();
-    Cam1Point3D_Homo.topRows(3) = Cam1Point3D_Vec;
+    Cam1Point3D_Homo.topRows(3) = Cam1Point3D_Vec; 
 
     Eigen::Vector3d Projected2D = calibraton*Image1ProjMat*Cam1Point3D_Homo;
 
