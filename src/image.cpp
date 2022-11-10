@@ -1,4 +1,6 @@
 #include "image.h"
+#include <Eigen/Core>
+
 
 //initialize all attribute with default values
 Image::Image() 
@@ -45,7 +47,7 @@ Eigen::Matrix3d QuaternionToRotationMatrix(const Eigen::Vector4d& qvec) {
   const Eigen::Vector4d normalized_qvec = NormalizeQuaternion(qvec);
   const Eigen::Quaterniond quat(normalized_qvec(0), normalized_qvec(1),
                                 normalized_qvec(2), normalized_qvec(3));
-  return quat.toRotationMatrix();
+  return quat.toRotationMatrix(); //check Eigen::Quat's attri?
 }
 
 //compose proj matrix from Quartenion & Translation
