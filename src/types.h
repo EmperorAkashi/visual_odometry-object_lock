@@ -3,14 +3,10 @@
 
 #include <cstdint>
 
-typedef __int8 int8_t;
-typedef __int16 int16_t;
-typedef __int32 int32_t;
-typedef __int64 int64_t;
-typedef unsigned __int8 uint8_t;
-typedef unsigned __int16 uint16_t;
-typedef unsigned __int32 uint32_t;
-typedef unsigned __int64 uint64_t;
+typedef int8_t uint8_t;
+typedef int16_t uint16_t;
+typedef int32_t uint32_t;
+typedef int64_t uint64_t;
 
 // Unique identifier for cameras.
 typedef uint32_t camera_t;
@@ -36,6 +32,19 @@ const image_pair_t kInvalidImagePairId =
     std::numeric_limits<image_pair_t>::max();
 const point2D_t kInvalidPoint2DIdx = std::numeric_limits<point2D_t>::max();
 const point3D_t kInvalidPoint3DId = std::numeric_limits<point3D_t>::max();
+
+#include <Eigen/Core>
+
+namespace Eigen {
+
+typedef Eigen::Matrix<float, 3, 4> Matrix3x4f;
+typedef Eigen::Matrix<double, 3, 4> Matrix3x4d;
+typedef Eigen::Matrix<double, 6, 6> Matrix6d;
+typedef Eigen::Matrix<uint8_t, 3, 1> Vector3ub;
+typedef Eigen::Matrix<uint8_t, 4, 1> Vector4ub;
+typedef Eigen::Matrix<double, 6, 1> Vector6d;
+
+}  // namespace Eigen
 
 
 #endif  // SRC_TYPES_H_

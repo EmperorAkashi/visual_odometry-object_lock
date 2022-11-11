@@ -2,6 +2,7 @@
 #define READ_DATA_H_
 
 #include <vector>
+#include <unordered_map>
 #include "types.h"
 
 class ReadData{
@@ -14,7 +15,7 @@ class ReadData{
     void ReadImagesText(const std::string& path);
     void ReadPoints3DText(const std::string& path);
 
-    // Get reference to all objects.
+    // Get reference to all objects. Empty map???
     inline const unordered_map<camera_t, class Camera> & Cameras() const;
     inline const unordered_map<image_t, class Image> & Images() const;
     inline const unordered_map<point3D_t, class Point3D> & Points3D() const;
@@ -32,4 +33,4 @@ class ReadData{
 
 
 
-#endif /* READ_DATA_H_ */
+#endif // READ_DATA_H_ 

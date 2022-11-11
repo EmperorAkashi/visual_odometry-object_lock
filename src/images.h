@@ -144,7 +144,6 @@ class Image {
 
     // Per image point, the number of correspondences that have a 3D point.
     std::vector<uint32_t> num_correspondences_have_point3D_;
-
-    }；
+    };
 
     #endif //SRC_IMAGE_H_
