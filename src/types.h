@@ -3,10 +3,10 @@
 
 #include <cstdint>
 
-typedef int8_t uint8_t;
-typedef int16_t uint16_t;
-typedef int32_t uint32_t;
-typedef int64_t uint64_t;
+// typedef int8_t uint8_t;
+// typedef int16_t uint16_t;
+// typedef int32_t uint32_t;
+// typedef int64_t uint64_t;
 
 // Unique identifier for cameras.
 typedef uint32_t camera_t;
@@ -23,7 +23,7 @@ typedef uint32_t point2D_t;
 // Unique identifier per added 3D point. Since we add many 3D points,
 // delete them, and possibly re-add them again, the maximum number of allowed
 // unique indices should be large.
-typedef uint64_t point3D_t;
+typedef int64_t point3D_t;
 
 // Values for invalid identifiers or indices.
 const camera_t kInvalidCameraId = std::numeric_limits<camera_t>::max();

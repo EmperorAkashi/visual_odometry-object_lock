@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <iostream>
 #include "read_data.h"
 #include "images.h"
 #include "camera.h"
@@ -20,7 +21,7 @@ int random()
 }
 
 double ProjDiff(Eigen::Vector2d Orig2D, Eigen::Vector3d Proj2D){
-    return std::abs(pow(Orig2D[0] - Proj2D[0]/Proj2D[2], 2) + pow(Orig2D[1] - Proj2D[1]/Proj2D[2], 2))
+    return std::abs(pow(Orig2D[0] - Proj2D[0]/Proj2D[2], 2) + pow(Orig2D[1] - Proj2D[1]/Proj2D[2], 2));
 }
 
 
@@ -71,7 +72,7 @@ int main(int argc, char** argv){
 
     //read 3d, find consistent in point3D_, which is a member variable of ReadData
     //Test 3d point's reprojection for camera 1
-    uint32_t Cam1Point2D_id =  random();
+    uint32_t Cam1Point2D_id = random();
     Point2D Cam1Point = Image1.Points2D_[Cam1Point2D_id];
     //call correspond 3d point from its attr
     uint32_t Cam1Point3D_id = Cam1Point.point3D_id_;
