@@ -9,7 +9,7 @@
 #include "point3d.h"
 #include <cmath>
 
-int random()
+long int random()
 {
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
@@ -30,7 +30,7 @@ int main(int argc, char** argv){
     if (argc < 4)
     {
         std::cout << "Standard Input" << std::endl;
-        std::cout << " " << argv[0] << "<image> <camera> <point3d>" << endl;
+        std::cout << " " << argv[0] << "<image> <camera> <point3d>" << std::endl;
     }
 
     std::string image_file = argv[1];
