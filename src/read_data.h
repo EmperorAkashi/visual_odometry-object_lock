@@ -22,9 +22,9 @@ class ReadData{
     
     //map to store images/camera info
     private:
-    unordered_map<camera_t, class Camera> cameras_; //hashmap vs EigenMap?
-    unordered_map<image_t, class Image> images_;
-    unordered_map<point3D_t, class Point3D> points3D_;
+    std::unordered_map<camera_t, class Camera> cameras_; //hashmap vs EigenMap?
+    std::unordered_map<image_t, class Image> images_;
+    std::unordered_map<point3D_t, class Point3D> points3D_;
 
     // { image_id, ... } where `images_.at(image_id).registered == true`.
     std::vector<image_t> reg_image_ids_;
