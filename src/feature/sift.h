@@ -1,75 +1,95 @@
-#ifndef SRC_FEATURE_SIFT_H_
-#define SRC_FEATURE_SIFT_H_
 
-//constants/config params for SIFT
-struct SiftExtractionOptions {
-  // Number of threads for feature extraction.
-  int num_threads = -1;
+#ifndef SIFT_H
+#define SIFT_H
 
-  // Whether to use the GPU for feature extraction.
-  bool use_gpu = true;
+#include <vector>
+#include <array>
+#include <cstdint>
 
-  // Index of the GPU used for feature extraction. For multi-GPU extraction,
-  // you should separate multiple GPU indices by comma, e.g., "0,1,2,3".
-  std::string gpu_index = "-1";
+#include "image.hpp"
 
-  // Maximum image size, otherwise image will be down-scaled.
-  int max_image_size = 3200;
+namespace sift {
 
-  // Maximum number of features to detect, keeping larger-scale features.
-  int max_num_features = 8192;
-
-  // First octave in the pyramid, i.e. -1 upsamples the image by one level.
-  int first_octave = -1; //scale down the image for DoG
-
-  // Number of octaves.
-  int num_octaves = 4;
-
-  // Number of levels per octave.
-  int octave_resolution = 3;
+struct ScaleSpacePyramid {
+    int num_octaves;
+    int imgs_per_octave;
+    std::vector<std::vector<Image>> octaves; 
 };
 
-struct SiftMatchingOptions {
-  // Number of threads for feature matching and geometric verification.
-  int num_threads = -1;
+struct Keypoint {
+    // discrete coordinates
+    int i;
+    int j;
+    int octave;
+    int scale; //index of gaussian image inside the octave
 
-  // Whether to use the GPU for feature matching.
-  bool use_gpu = true;
+    // continuous coordinates (interpolated)
+    float x;
+    float y;
+    float sigma;
+    float extremum_val; //value of interpolated DoG extremum
+    
+    std::array<uint8_t, 128> descriptor;
+};
 
-  // Index of the GPU used for feature matching. For multi-GPU matching,
-  // you should separate multiple GPU indices by comma, e.g., "0,1,2,3".
-  std::string gpu_index = "-1";
+//*******************************************
+// SIFT algorithm parameters, used by default
+//*******************************************
 
-  // Maximum distance ratio between first and second best match.
-  double max_ratio = 0.8;
+// digital scale space configuration and keypoint detection
+const int MAX_REFINEMENT_ITERS = 5;
+const float SIGMA_MIN = 0.8;
+const float MIN_PIX_DIST = 0.5;
+const float SIGMA_IN = 0.5;
+const int N_OCT = 8;
+const int N_SPO = 3;
+const float C_DOG = 0.015;
+const float C_EDGE = 10;
 
-  // Maximum distance to best match.
-  double max_distance = 0.7;
+// computation of the SIFT descriptor
+const int N_BINS = 36;
+const float LAMBDA_ORI = 1.5;
+const int N_HIST = 4;
+const int N_ORI = 8;
+const float LAMBDA_DESC = 6;
 
-  // Whether to enable cross checking in matching.
-  bool cross_check = true;
+// feature matching
+const float THRESH_ABSOLUTE = 350;
+const float THRESH_RELATIVE = 0.7;
 
-  // Maximum number of matches.
-  int max_num_matches = 32768;
+ScaleSpacePyramid generate_gaussian_pyramid(const Image& img, float sigma_min=SIGMA_MIN,
+                                            int num_octaves=N_OCT, int scales_per_octave=N_SPO);
 
-  // Maximum epipolar error in pixels for geometric verification.
-  double max_error = 4.0;
+ScaleSpacePyramid generate_dog_pyramid(const ScaleSpacePyramid& img_pyramid);
 
-  // Confidence threshold for geometric verification.
-  double confidence = 0.999;
+std::vector<Keypoint> find_keypoints(const ScaleSpacePyramid& dog_pyramid,
+                                     float contrast_thresh=C_DOG, float edge_thresh=C_EDGE);
 
-  // Minimum/maximum number of RANSAC iterations. Note that this option
-  // overrules the min_inlier_ratio option.
-  int min_num_trials = 100;
-  int max_num_trials = 10000;
+ScaleSpacePyramid generate_gradient_pyramid(const ScaleSpacePyramid& pyramid);
 
-  // A priori assumed minimum inlier ratio, which determines the maximum
-  // number of iterations.
-  double min_inlier_ratio = 0.25;
+std::vector<float> find_keypoint_orientations(Keypoint& kp, const ScaleSpacePyramid& grad_pyramid,
+                                              float lambda_ori=LAMBDA_ORI, float lambda_desc=LAMBDA_DESC);
 
-  // Minimum number of inliers for an image pair to be considered as
-  // geometrically verified.
-  int min_num_inliers = 15;
-  }；
+void compute_keypoint_descriptor(Keypoint& kp, float theta, const ScaleSpacePyramid& grad_pyramid,
+                                 float lambda_desc=LAMBDA_DESC);
 
-  
+std::vector<Keypoint> find_keypoints_and_descriptors(const Image& img, float sigma_min=SIGMA_MIN,
+                                                     int num_octaves=N_OCT, 
+                                                     int scales_per_octave=N_SPO, 
+                                                     float contrast_thresh=C_DOG,
+                                                     float edge_thresh=C_EDGE,
+                                                     float lambda_ori=LAMBDA_ORI,
+                                                     float lambda_desc=LAMBDA_DESC);
+
+std::vector<std::pair<int, int>> find_keypoint_matches(std::vector<Keypoint>& a,
+                                                       std::vector<Keypoint>& b,
+                                                       float thresh_relative=THRESH_RELATIVE,
+                                                       float thresh_absolute=THRESH_ABSOLUTE);
+
+Image draw_keypoints(const Image& img, const std::vector<Keypoint>& kps);
+
+Image draw_matches(const Image& a, const Image& b, std::vector<Keypoint>& kps_a,
+                   std::vector<Keypoint>& kps_b, std::vector<std::pair<int, int>> matches);
+
+} // namespace sift
+#endif
