@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-# visual_odometry-object_lock
-This project is aimed to lock marked object and find the homography transformation so does 3d transformation of different sensor,
+## visual_odometry-object_lock
+
+This project is aimed to lock marked object and find the homography transformation so does 3d transformation of different sensor, 
 The code are heavily adapted from COLMAP's src: https://github.com/colmap/colmap.git
-=======
-# sift-cpp
+# sift-cpp, from third party repo
 
 ## Introduction
 This is a C++ implementation of [SIFT](https://en.wikipedia.org/wiki/Scale-invariant_feature_transform), a feature detection algorithm.
