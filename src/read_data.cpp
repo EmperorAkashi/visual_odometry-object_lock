@@ -8,7 +8,7 @@
 //initialize the class with file path/name
 ReadData::ReadData(std::string filename){
   public:
-    string filename = filename;
+    std::string filename = filename;
 }
 
 void ReadData::ReadImagesText(const std::string& path) {

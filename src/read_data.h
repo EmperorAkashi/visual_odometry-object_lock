@@ -16,9 +16,9 @@ class ReadData{
     void ReadPoints3DText(const std::string& path);
 
     // Get reference to all objects. Empty map???
-    inline const unordered_map<camera_t, class Camera> & Cameras() const;
-    inline const unordered_map<image_t, class Image> & Images() const;
-    inline const unordered_map<point3D_t, class Point3D> & Points3D() const;
+    const std::unordered_map<camera_t, class Camera> & Cameras() const;
+    const std::unordered_map<image_t, class Image> & Images() const;
+    const std::unordered_map<point3D_t, class Point3D> & Points3D() const;
     
     //map to store images/camera info
     private:

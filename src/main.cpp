@@ -85,7 +85,7 @@ int main(int argc, char** argv){
     Eigen::Vector4d Cam1Point3D_Homo = Eigen::Vector4d::Identity();
     Cam1Point3D_Homo.topRows(3) = Cam1Point3D_Vec; 
 
-    Eigen::Vector3d Projected2D = calibraton*Image1ProjMat*Cam1Point3D_Homo;
+    Eigen::Vector3d Projected2D = calibration*Image1ProjMat*Cam1Point3D_Homo;
 
     double diff = ProjDiff(Cam1Point.XY(), Projected2D);
     std::cout << "difference of one projection"  << diff << std::endl;

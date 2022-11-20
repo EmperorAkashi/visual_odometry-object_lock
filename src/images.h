@@ -61,6 +61,9 @@ class Image {
     void SetPoint3DForPoint2D(const uint32_t point2D_idx,
                               const uint32_t point3D_id);
 
+    // Check whether one of the image points is part of the 3D point track.
+    bool HasPoint3D(const point3D_t point3D_id) const;
+    
     // Access translation vector as (tx, ty, tz) specifying the translation of the
     // pose which is defined as the transformation from world to image space.
     inline const Eigen::Vector3d& Tvec() const;
