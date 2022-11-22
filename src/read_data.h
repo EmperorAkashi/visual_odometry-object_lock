@@ -10,7 +10,7 @@ class ReadData{
 
     // Read data from text or binary file. 
     ReadData(std::string filename);
-
+    std::string filename;
     void ReadCamerasText(const std::string& path);
     void ReadImagesText(const std::string& path);
     void ReadPoints3DText(const std::string& path);
@@ -30,7 +30,19 @@ class ReadData{
     std::vector<image_t> reg_image_ids_;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+// Accessors
+////////////////////////////////////////////////////////////////////////////////
+std::unordered_map<camera_t, class Camera> ReadData::Cameras() const{
+   return cameras_; 
+}
 
+std::unordered_map<image_t, class Image> ReadData::Images() const{
+   return images_; 
+}
 
+std::unordered_map<point3D_t, class Point_3D> ReadData::Point_3D() const{
+   return points3D_; 
+}
 
 #endif // READ_DATA_H_ 
