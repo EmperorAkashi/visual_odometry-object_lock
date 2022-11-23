@@ -53,6 +53,11 @@ class Image {
     void SetPoints2D(const std::vector<Eigen::Vector2d>& points);
     void SetPoints2D(const std::vector<class Point2D>& points);
 
+    // Access the coordinates of image points. ATTENTION to s for Points
+    inline Point2D& Point2D(const point2D_t point2D_idx) const;
+    inline Point2D& Point2D(const point2D_t point2D_idx);
+    inline std::vector<class Point2D>& Points2D() const;
+
     ///
     //need setpoint3d, point2D vector call setpoint3d method
     ///
@@ -63,7 +68,7 @@ class Image {
 
     // Check whether one of the image points is part of the 3D point track.
     bool HasPoint3D(const point3D_t point3D_id) const;
-    
+
     // Access translation vector as (tx, ty, tz) specifying the translation of the
     // pose which is defined as the transformation from world to image space.
     inline const Eigen::Vector3d& Tvec() const;
@@ -149,4 +154,36 @@ class Image {
     std::vector<uint32_t> num_correspondences_have_point3D_;
     };
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // Implementation
+    ////////////////////////////////////////////////////////////////////////////////
+
+    image_t Image::ImageId() const { return image_id_; }
+
+    void Image::SetImageId(const image_t image_id) { image_id_ = image_id; }
+
+    const std::string& Image::Name() const { return name_; }
+
+    std::string& Image::Name() { return name_; }
+
+    void Image::SetName(const std::string& name) { name_ = name; }
+
+    inline camera_t Image::CameraId() const { return camera_id_; }
+
+    inline void Image::SetCameraId(const camera_t camera_id) {
+      CHECK_NE(camera_id, kInvalidCameraId);
+      camera_id_ = camera_id;
+    }
+
+    inline bool Image::HasCamera() const { return camera_id_ != kInvalidCameraId; }
+
+    bool Image::IsRegistered() const { return registered_; }
+
+    void Image::SetRegistered(const bool registered) { registered_ = registered; }
+
+    class Point2D& Image::Point2D(const point2D_t point2D_idx) {
+      return points2D_.at(point2D_idx);
+    }
+
+    const std::vector<class Point2D>& Image::Points2D() const { return points2D_; }
     #endif //SRC_IMAGE_H_

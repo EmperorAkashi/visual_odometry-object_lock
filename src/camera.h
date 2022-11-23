@@ -23,6 +23,7 @@ class Camera{
     inline size_t Height() const;
     inline void SetWidth(const size_t width);
     inline void SetHeight(const size_t height);
+    inline const std::vector<double>& Params() const;
 
     // Access focal length parameters.
     double MeanFocalLength() const;
@@ -59,7 +60,7 @@ class Camera{
     private:
     // The unique identifier of the camera. If the identifier is not specified
     // it is set to `kInvalidCameraId`.
-    camera_t camera_id_;
+    _int32 camera_id_;
 
     // The identifier of the camera model. If the camera model is not specified
     // the identifier is `kInvalidCameraModelId`.
@@ -77,7 +78,7 @@ class Camera{
 //////////////
 //Accessors
 /////////////
-camera_t Camera::CameraId() const { return camera_id_; }
+_int32 Camera::CameraId() const { return camera_id_; }
 
 void Camera::SetCameraId(const camera_t camera_id) { camera_id_ = camera_id; }
 
@@ -91,5 +92,6 @@ void Camera::SetWidth(const size_t width) { width_ = width; }
 
 void Camera::SetHeight(const size_t height) { height_ = height; }
 
+std::vector<double>& Camera::Params() { return params_; }
 
 #endif  // SRC_CAMERA_H_

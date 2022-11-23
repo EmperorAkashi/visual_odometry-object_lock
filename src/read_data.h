@@ -4,6 +4,9 @@
 #include <vector>
 #include <unordered_map>
 #include "types.h"
+#include "images.h"
+#include "point3d.h"
+#include "camera.h"
 
 class ReadData{
     public:
@@ -15,12 +18,12 @@ class ReadData{
     void ReadImagesText(const std::string& path);
     void ReadPoints3DText(const std::string& path);
 
-    // Get reference to all objects. Empty map???
+    // accessors for the private members, callable
     const std::unordered_map<camera_t, class Camera> & Cameras() const;
     const std::unordered_map<image_t, class Image> & Images() const;
     const std::unordered_map<point3D_t, class Point3D> & Points3D() const;
     
-    //map to store images/camera info
+    //map to store images/camera instances
     private:
     std::unordered_map<camera_t, class Camera> cameras_; //hashmap vs EigenMap?
     std::unordered_map<image_t, class Image> images_;
@@ -41,7 +44,7 @@ std::unordered_map<image_t, class Image> ReadData::Images() const{
    return images_; 
 }
 
-std::unordered_map<point3D_t, class Point_3D> ReadData::Point_3D() const{
+std::unordered_map<point3D_t, class Point3D> ReadData::Point3D() const{
    return points3D_; 
 }
 

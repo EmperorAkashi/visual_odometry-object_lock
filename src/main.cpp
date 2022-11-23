@@ -47,25 +47,25 @@ int main(int argc, char** argv){
     //image instances and corresponding data already set in image class
     //images_ is a map of images
     read_image.ReadImagesText(read_image.filename);
-    Image Image1 = read_image.images_[idx1]; //check image_t == image_id??
-    Image Image2 = read_image.images_[idx2];
+    Image Image1 = read_image.Images()[idx1]; //check image_t == image_id??
+    Image Image2 = read_image.Images()[idx2];
 
     //set boolean when read 3d idx from image.txt
-    while (! read_image.images_[idx1].HasPoint3D()){
+    while (! read_image.Images()[idx1].HasPoint3D()){
         idx1 = random();
     }
 
-    while (! read_image.images_[idx2].HasPoint3D() || idx2 == idx1){
+    while (! read_image.Images()[idx2].HasPoint3D() || idx2 == idx1){
         idx2 = random();
     }
 
     //create camera for image1&2, read camera paras
     read_camera.ReadCamerasText(read_camera.filename);
-    int camera_id1 = Image1.camera_id_;
-    int camera_id2 = Image2.camera_id_;
-    Camera camera1 = read_camera.cameras_[camera_id1];
-    Camera camera2 = read_camera.cameras_[camera_id2];
-    std::vector<size_t> cam_para = camera1.params_;//check def of params??
+    int camera_id1 = Image1.cameraId();
+    int camera_id2 = Image2.cameraId();
+    Camera camera1 = read_camera.Cameras()[camera_id1];
+    Camera camera2 = read_camera.Cameras()[camera_id2];
+    std::vector<size_t> cam_para = camera1.Params();//check def of params??
     std::vector<size_t> cam_focal = camera1.FocalLengthIdxs();
 
     Eigen::Matrix3d calibration = camera1.CalibrationMatrix();
@@ -73,8 +73,9 @@ int main(int argc, char** argv){
     //read 3d, find consistent in point3D_, which is a member variable of ReadData
     //Test 3d point's reprojection for camera 1
     uint32_t Cam1Point2D_id = random();
-    Point2D Cam1Point = Image1.Points2D_[Cam1Point2D_id];
+    Point2D Cam1Point = Image1.Points2D()[Cam1Point2D_id];
     //call correspond 3d point from its attr
+    //point2d need add point3d accessors
     uint32_t Cam1Point3D_id = Cam1Point.point3D_id_;
     Point3D Cam1Point3D = read_point3d.points3D_[Cam1Point3D_id];
 
