@@ -25,7 +25,7 @@ double ProjDiff(Eigen::Vector2d Orig2D, Eigen::Vector3d Proj2D){
 }
 
 
-//check exe file of COLMAP, read image files by argument
+//check exe file of COLMAP, read image files from argument
 int main(int argc, char** argv){
     if (argc < 4)
     {
@@ -39,7 +39,7 @@ int main(int argc, char** argv){
     ReadData read_image = ReadData(image_file);
     ReadData read_camera = ReadData(camera_file);
     ReadData read_point3d = ReadData(point3d_file);
-    int n = read_image.images_.size();  //number of images by access member data
+    int n = read_image.Images().size();  //number of images by access member data
 
     uint32_t idx1 = random();
     uint32_t idx2 = random();
@@ -61,8 +61,8 @@ int main(int argc, char** argv){
 
     //create camera for image1&2, read camera paras
     read_camera.ReadCamerasText(read_camera.filename);
-    int camera_id1 = Image1.cameraId();
-    int camera_id2 = Image2.cameraId();
+    int camera_id1 = Image1.CameraId();
+    int camera_id2 = Image2.CameraId();
     Camera camera1 = read_camera.Cameras()[camera_id1];
     Camera camera2 = read_camera.Cameras()[camera_id2];
     std::vector<size_t> cam_para = camera1.Params();//check def of params??
@@ -76,8 +76,8 @@ int main(int argc, char** argv){
     Point2D Cam1Point = Image1.Points2D()[Cam1Point2D_id];
     //call correspond 3d point from its attr
     //point2d need add point3d accessors
-    uint32_t Cam1Point3D_id = Cam1Point.point3D_id_;
-    Point3D Cam1Point3D = read_point3d.points3D_[Cam1Point3D_id];
+    uint32_t Cam1Point3D_id = Cam1Point.Point3DId();
+    Point3D Cam1Point3D = read_point3d.Points3D()[Cam1Point3D_id];
 
     Eigen::Vector3d Cam1Point3D_Vec = Cam1Point3D.XYZ();
     Eigen::Matrix3x4d Image1ProjMat = Image1.ProjectionMatrix();
