@@ -11,9 +11,7 @@ class Point3D {
 
   // The point coordinate in world space.
   inline Eigen::Vector3d& XYZ() const;
-  inline Eigen::Vector3d& XYZ();
   inline double XYZ(const size_t idx) const;
-  inline double& XYZ(const size_t idx);
   inline double X() const;
   inline double Y() const;
   inline double Z() const;
@@ -29,11 +27,7 @@ class Point3D {
 
 Eigen::Vector3d& Point3D::XYZ() const { return xyz_; }
 
-Eigen::Vector3d& Point3D::XYZ() { return xyz_; }
-
 double Point3D::XYZ(const size_t idx) const { return xyz_(idx); }
-
-double& Point3D::XYZ(const size_t idx) { return xyz_(idx); }
 
 double Point3D::X() const { return xyz_.x(); }
 

@@ -7,6 +7,7 @@
 
 #include "camera.h"
 #include "types.h"
+#include "point2d.h"
 
 class Image {
     public:
@@ -18,6 +19,7 @@ class Image {
     void SetUp(const Camera& camera);
 
     image_t ImageId() const;
+    inline std::string& Name();
     void SetImageId(const image_t image_id);
     void SetName(const std::string& name);
 
@@ -55,7 +57,6 @@ class Image {
 
     // Access the coordinates of image points. ATTENTION to s for Points
     inline Point2D& Point2D(const point2D_t point2D_idx) const;
-    inline Point2D& Point2D(const point2D_t point2D_idx);
     inline std::vector<class Point2D>& Points2D() const;
 
     ///
@@ -161,8 +162,6 @@ class Image {
     image_t Image::ImageId() const { return image_id_; }
 
     void Image::SetImageId(const image_t image_id) { image_id_ = image_id; }
-
-    const std::string& Image::Name() const { return name_; }
 
     std::string& Image::Name() { return name_; }
 
