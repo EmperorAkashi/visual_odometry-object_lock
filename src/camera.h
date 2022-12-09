@@ -11,7 +11,7 @@ class Camera{
 
     // Access the unique identifier of the camera.
     inline camera_t CameraId() const;
-    inline void SetCameraId(const camera_t camera_id);
+    inline void SetCameraId(const int32_t camera_id);
 
     // Access the camera model.
     inline int ModelId() const;
@@ -61,7 +61,7 @@ class Camera{
     private:
     // The unique identifier of the camera. If the identifier is not specified
     // it is set to `kInvalidCameraId`.
-    int32 camera_id_;
+    int32_t camera_id_;
 
     // The identifier of the camera model. If the camera model is not specified
     // the identifier is `kInvalidCameraModelId`.
@@ -79,9 +79,9 @@ class Camera{
 //////////////
 //Accessors
 /////////////
-int32 Camera::CameraId() const { return camera_id_; }
+int32_t Camera::CameraId() const { return camera_id_; }
 
-void Camera::SetCameraId(const camera_t camera_id) { camera_id_ = camera_id; }
+void Camera::SetCameraId(const int32_t camera_id) { camera_id_ = camera_id; }
 
 int Camera::ModelId() const { return model_id_; }
 
