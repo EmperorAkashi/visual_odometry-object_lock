@@ -44,7 +44,7 @@ std::unordered_map<image_t, class Image> ReadData::Images() const{
    return images_; 
 }
 
-std::unordered_map<point3D_t, class Point3D> ReadData::Point3D() const{
+std::unordered_map<point3D_t, class Point3D> ReadData::Points3D() const{
    return points3D_; 
 }
 
