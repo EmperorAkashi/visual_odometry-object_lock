@@ -1,0 +1,20 @@
+{
+  "ActiveTargetSystem": "WSL: Ubuntu",
+  "DevContainersInfoBarHidden": true,
+  "OutputFoldersPerTargetSystem": {
+    "Local Machine": [
+      "out\\build\\x64-Debug",
+      "out\\install\\x64-Debug"
+    ],
+    "WSL: Ubuntu": [
+      "out\\build\\x64-Debug",
+      "out\\install\\x64-Debug"
+    ]
+  },
+  "ExpandedNodes": [
+    "",
+    "\\src"
+  ],
+  "SelectedNode": "\\src\\main.cpp",
+  "PreviewInSolutionExplorer": false
+}
