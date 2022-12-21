@@ -10,7 +10,7 @@ class Camera{
     Camera();
 
     // Access the unique identifier of the camera.
-    inline camera_t CameraId() const;
+    inline int CameraId() const;
     inline void SetCameraId(const int32_t camera_id);
 
     // Access the camera model.
@@ -24,7 +24,7 @@ class Camera{
     inline size_t Height() const;
     inline void SetWidth(const size_t width);
     inline void SetHeight(const size_t height);
-    inline const std::vector<double>& Params() const;
+    inline const std::vector<double>& Params();
 
     // Access focal length parameters.
     double MeanFocalLength() const;
@@ -79,7 +79,7 @@ class Camera{
 //////////////
 //Accessors
 /////////////
-int32_t Camera::CameraId() const { return camera_id_; }
+int Camera::CameraId() const { return camera_id_; }
 
 void Camera::SetCameraId(const int32_t camera_id) { camera_id_ = camera_id; }
 

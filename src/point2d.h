@@ -22,7 +22,7 @@ class Point2D {
 
   // The identifier of the observed 3D point. If the image point does not
   // observe a 3D point, the identifier is `kInvalidPoint3Did`.
-  inline uint32_t Point3DId() const;
+  inline int Point3DId() const;
   inline bool HasPoint3D() const;
   inline void SetPoint3DId(const uint32_t point3D_id); //fxn fot set the point3d
 
@@ -32,7 +32,7 @@ class Point2D {
 
   // The identifier of the 3D point. If the 2D point is not part of a 3D point
   // track the identifier is `kInvalidPoint3DId` and `HasPoint3D() = false`.
-  uint32_t point3D_id_;
+  int point3D_id_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ double Point2D::Y() const { return xy_.y(); }
 
 void Point2D::SetXY(const Eigen::Vector2d& xy) { xy_ = xy; }
 
-point3D_t Point2D::Point3DId() const { return point3D_id_; }
+int Point2D::Point3DId() const { return point3D_id_; }
 
 bool Point2D::HasPoint3D() const { return point3D_id_ != kInvalidPoint3DId; }
 
