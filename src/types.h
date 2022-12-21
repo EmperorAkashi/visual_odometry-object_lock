@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <Eigen/Core>
 
-#include "util/alignment.h"
+#include "alignment.h"
 
 #ifdef _MSC_VER
 #if _MSC_VER >= 1600
