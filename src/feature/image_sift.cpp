@@ -3,7 +3,7 @@
 #include <cassert>
 #include <utility>
 
-#include "image.hpp"
+#include "image_sift.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION

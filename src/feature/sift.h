@@ -6,7 +6,7 @@
 #include <array>
 #include <cstdint>
 
-#include "image.hpp"
+#include "image_sift.h"
 
 namespace sift {
 

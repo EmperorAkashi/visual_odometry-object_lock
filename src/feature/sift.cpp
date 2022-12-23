@@ -7,8 +7,8 @@
 #include <tuple>
 #include <cassert>
 
-#include "sift.hpp"
-#include "image.hpp"
+#include "sift.h"
+#include "image_sift.h"
 
 
 namespace sift {

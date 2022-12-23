@@ -1,8 +1,8 @@
 #include <iostream> 
 #include <string>
 
-#include "image.hpp"
-#include "sift.hpp"
+#include "image_sift.h"
+#include "sift.h"
 
 int main(int argc, char *argv[])
 {
