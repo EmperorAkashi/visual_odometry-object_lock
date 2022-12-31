@@ -8,6 +8,7 @@
 #include "point2d.h"
 #include "point3d.h"
 #include <cmath>
+#include "types.h"
 
 long int random()
 {
@@ -20,6 +21,7 @@ long int random()
     return idx;
 }
 
+//calculate reprojection error
 double ProjDiff(Eigen::Vector2d Orig2D, Eigen::Vector3d Proj2D){
     return std::abs(pow(Orig2D[0] - Proj2D[0]/Proj2D[2], 2) + pow(Orig2D[1] - Proj2D[1]/Proj2D[2], 2));
 }
@@ -33,16 +35,18 @@ int main(int argc, char** argv){
         std::cout << " " << argv[0] << "<image> <camera> <point3d>" << std::endl;
     }
 
+    //get files name from command line
     std::string image_file = argv[1];
     std::string camera_file = argv[2];
     std::string point3d_file = argv[3];
+    //read files and instantiate class for each
     ReadData read_image = ReadData(image_file);
     ReadData read_camera = ReadData(camera_file);
     ReadData read_point3d = ReadData(point3d_file);
     int n = read_image.Images().size();  //number of images by access member data
 
-    uint32_t idx1 = random();
-    uint32_t idx2 = random();
+    long idx1 = random();
+    long idx2 = random();
     
     //image instances and corresponding data already set in image class
     //images_ is a map of images
