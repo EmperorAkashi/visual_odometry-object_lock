@@ -12,7 +12,7 @@ class ReadData{
     public:
 
     // Read data from text or binary file. 
-    ReadData(std::string filename);
+    ReadData(std::string filePath);
     std::string filename;
     void ReadCamerasText(const std::string& path);
     void ReadImagesText(const std::string& path);

@@ -6,9 +6,7 @@
 #include "point3d.h"
 
 //initialize the class with file path/name
-ReadData::ReadData(std::string filename){
-  public:
-    std::string filename = filename;
+ReadData::ReadData(std::string filePath): filename(filePath){
 }
 
 void ReadData::ReadImagesText(const std::string& path) {
