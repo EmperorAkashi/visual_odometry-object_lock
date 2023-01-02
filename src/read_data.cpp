@@ -6,6 +6,13 @@
 #include "point3d.h"
 
 //initialize the class with file path/name
+//to initialize a member public:
+//1. Line(double len): length(len){}
+//     double length;   
+//2. Line(double len){
+//       length = len;
+//   }
+//   double length;
 ReadData::ReadData(std::string filePath): filename(filePath){
 }
 

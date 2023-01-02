@@ -50,7 +50,7 @@ int main(int argc, char** argv){
     
     //image instances and corresponding data already set in image class
     //images_ is a map of images
-    read_image.ReadImagesText(read_image.filename);
+    read_image.ReadImagesText(filename); //filename initialized in constructor
     Image Image1 = read_image.Images()[idx1]; //check image_t == image_id??
     Image Image2 = read_image.Images()[idx2];
 
@@ -64,7 +64,7 @@ int main(int argc, char** argv){
     }
 
     //create camera for image1&2, read camera paras
-    read_camera.ReadCamerasText(read_camera.filename);
+    read_camera.ReadCamerasText(filename);
     int camera_id1 = Image1.CameraId();
     int camera_id2 = Image2.CameraId();
     Camera camera1 = read_camera.Cameras()[camera_id1];
