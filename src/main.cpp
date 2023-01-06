@@ -3,7 +3,7 @@
 #include <random>
 #include <iostream>
 #include "read_data.h"
-#include "images.h"
+#include "image.h"
 #include "camera.h"
 #include "point2d.h"
 #include "point3d.h"

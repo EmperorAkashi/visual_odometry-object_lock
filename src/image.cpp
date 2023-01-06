@@ -1,5 +1,4 @@
 #include "image.h"
-#include <Eigen/Core>
 
 
 //initialize all attribute with default values
