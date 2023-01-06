@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "types.h"
-#include "images.h"
+#include "image.h"
 #include "point3d.h"
 #include "camera.h"
 

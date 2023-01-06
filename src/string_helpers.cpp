@@ -1,5 +1,6 @@
-#include "string.h"
+#include "string_helpers.h"
 
+#include <algorithm>
 #include <fstream>
 
 bool IsNotWhiteSpace(const int character) {

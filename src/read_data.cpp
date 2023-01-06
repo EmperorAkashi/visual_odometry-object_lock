@@ -108,7 +108,7 @@ void ReadData::ReadImagesText(const std::string& path) {
           point3D_ids.push_back(kInvalidPoint3DId);
         } else {
           point3D_ids.push_back(std::stoll(item)); //specify 3d's id
-          point.point3D_id_ = std::stoll(item)；//set the point3d's id for curr 2d point
+          point.point3D_id_ = std::stoll(item); //set the point3d's id for curr 2d point
         }
       }
     }
