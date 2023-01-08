@@ -65,6 +65,8 @@ typedef Eigen::Matrix<uint8_t, 3, 1> Vector3ub;
 typedef Eigen::Matrix<uint8_t, 4, 1> Vector4ub;
 typedef Eigen::Matrix<double, 6, 1> Vector6d;
 typedef Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic> DLTMatrix;
+typedef Eigen::Matrix<double, Dynamic, 1> VectorXd;
+
 
 }  // namespace Eigen
 

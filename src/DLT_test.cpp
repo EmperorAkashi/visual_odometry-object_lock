@@ -31,9 +31,15 @@ Eigen::Matrix3x4d DLT(vector<Eigen::Vector3d> ControlPoints, vector<Eigen::Vecto
         LinearSystem.push_back(curr_2);
     }
 
+    //initialize solution vec and homogeneaous vec
+    VectorXd b = Eigen::Map<VectorXd>(LinearSystem.size());
+    VectorXd x = Eigen::Map<VectorXd>(LinearSystem.size());
+
     int n_rows, n_cols = LinearSystem.size(), LinearSystem[0].size();
     DLTMatrix M = Eigen::Map<DLTMatrix>(LinearSystem.data(), n_rows, n_cols);
     
+    //solve the linear system
+    x = M.colPivHouseholderQr().solve(b);
 }
 
 int main(){
