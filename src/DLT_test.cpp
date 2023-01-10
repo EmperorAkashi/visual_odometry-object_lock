@@ -12,10 +12,12 @@ struct Normalized
 
 };
 
+//function to read input control points (required 6) and correspond image points
+//output: 3x4 projection matrix
 Eigen::Matrix3x4d DLT(vector<Eigen::Vector3d> ControlPoints, vector<Eigen::Vector2d> ImagePoints)
 {
     if(ControlPoints.size() < 6)
-        throw std::invalid_argument( " DLT requires at least 6 calibration points.");
+        throw std::invalid_argument( "DLT requires at least 6 calibration points.");
     
     vector<vector<float>> LinearSystem;
     int nPoints = ControlPoints.size();
@@ -40,6 +42,8 @@ Eigen::Matrix3x4d DLT(vector<Eigen::Vector3d> ControlPoints, vector<Eigen::Vecto
     
     //solve the linear system
     x = M.colPivHouseholderQr().solve(b);
+
+    Eigen::Matrix3x4d ProjMatrix;
 }
 
 int main(){
