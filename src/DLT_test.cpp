@@ -44,6 +44,11 @@ Eigen::Matrix3x4d DLT(vector<Eigen::Vector3d> ControlPoints, vector<Eigen::Vecto
     x = M.colPivHouseholderQr().solve(b);
 
     Eigen::Matrix3x4d ProjMatrix;
+
+    for(int i = 0; i < 3; i++){
+        ProjMatrix.row(i) << x[i:(i+1)*4];
+    }
+    return ProjMatrix;
 }
 
 int main(){
