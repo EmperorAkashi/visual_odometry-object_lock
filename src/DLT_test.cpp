@@ -37,6 +37,7 @@ Eigen::Matrix3x4d DLT(vector<Eigen::Vector3d> ControlPoints, vector<Eigen::Vecto
     VectorXd b = Eigen::Map<VectorXd>(LinearSystem.size());
     VectorXd x = Eigen::Map<VectorXd>(LinearSystem.size());
 
+    //convert 2d vector as coeff matrix
     int n_rows, n_cols = LinearSystem.size(), LinearSystem[0].size();
     DLTMatrix M = Eigen::Map<DLTMatrix>(LinearSystem.data(), n_rows, n_cols);
     
